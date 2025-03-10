@@ -1,13 +1,25 @@
 name: Deploy
-on: [push]
+
+on:
+  push:
+    branches:
+      - main  # تأكد من أنك تدفع التغييرات إلى الفرع المحدد
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: npm install
-    - run: npm run build
-    - uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install  # تأكد من أن الحزم يتم تثبيتها بنجاح
+
+      - name: Build project
+        run: npm run build  # تأكد من أن عملية البناء تنتهي بنجاح
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.MY_GITHUB_TOKEN }}  # استخدم الـ Token الذي قمت بإضافته في Secrets
+          publish_dir: ./dist  # تأكد من أن المسار صحيح لمجلد البناء
